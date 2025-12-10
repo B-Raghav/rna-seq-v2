@@ -26,4 +26,3 @@ Thumbs.db
 
 # Project specific
 backend/vectorstore/
-*.pdf
