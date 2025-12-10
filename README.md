@@ -1,6 +1,6 @@
 # RNA-seq Visual Assistant
 
-A local RAG chatbot + Python visualization runner.
+A local RAG chatbot + Python visualization runner for RNA-seq analysis.
 
 ## 🚀 Features
 - PDF-based Retrieval-Augmented Generation
@@ -8,13 +8,12 @@ A local RAG chatbot + Python visualization runner.
 - Generates executable Python visualization code
 - Run plots inside the chat UI
 - Windows + Mac supported
-- Zero LangChain dependency → super stable
 
 ## 🛠 Installation
 
 ### 1. Install Ollama
 
-https://ollama.com
+Download from https://ollama.com
 
 ```bash
 ollama pull mistral
@@ -22,14 +21,29 @@ ollama pull mistral
 
 ### 2. Backend Setup
 
+**Mac:**
 ```bash
 cd backend
-python -m venv venv
-# Windows
-venv\\Scripts\\activate
-# Mac
+python3 -m venv venv
 source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
 
+**Windows (PowerShell):**
+```powershell
+cd backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+**Windows (CMD):**
+```cmd
+cd backend
+python -m venv venv
+venv\Scripts\activate.bat
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
@@ -44,49 +58,50 @@ npm run dev
 
 Open http://localhost:5173
 
-## 🧪 API Testing
+## 🧪 API Endpoints
 - GET /health
 - POST /chat
 - POST /run-code
 
-## 🧱 Project Structure
+## 📁 Project Structure
 ```
-rna-seq-visual-assistant/
-├─ backend/
-│  ├─ app/
-│  │  ├─ main.py
-│  │  ├─ config.py
-│  │  ├─ rag.py
-│  │  ├─ code_executor.py
-│  │  ├─ models.py
-│  │  ├─ utils.py
-│  │  └─ __init__.py
-│  ├─ data/
-│  │  └─ rna_seq_tutorial.pdf
-│  ├─ vectorstore/
-│  │  └─ chroma/
-│  ├─ requirements.txt
-│  └─ README.md
-├─ frontend/
-│  └─ README.md
-└─ README.md
+rna-seq-v2/
+├── backend/
+│   ├── app/
+│   │   ├── main.py        # FastAPI app
+│   │   ├── config.py      # Configuration
+│   │   ├── rag.py         # RAG pipeline
+│   │   ├── code_executor.py # Python sandbox
+│   │   ├── models.py      # Pydantic models
+│   │   └── utils.py       # Utilities
+│   ├── data/
+│   │   └── rna_seq_tutorial.pdf
+│   ├── vectorstore/       # ChromaDB (auto-created)
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   └── package.json
+└── README.md
 ```
 
-## 🧬 RAG Pipeline Description
-- Load PDF
-- Split into 500–800 char overlapping chunks
-- Embed via SentenceTransformers (`all-MiniLM-L6-v2`)
-- Persist in ChromaDB (`backend/vectorstore/chroma`)
-- Retrieve relevant chunks for each query
-- Build system prompt enforcing PDF-only answers + self-contained Python code
-- Call Ollama Mistral via `POST /api/chat`
-- Return Markdown answer plus cited chunks
+## 🧬 How It Works
+1. PDF is loaded and split into chunks
+2. SentenceTransformers embeds chunks
+3. ChromaDB stores and retrieves relevant context
+4. Ollama Mistral generates answers and Python code
+5. Code runs in a sandboxed executor with matplotlib
 
-## ✨ Acknowledgments
-PDF source: *Unlocking Biological Insights: A Data Science Primer for RNA-seq Analysis*
+## ⚠️ Troubleshooting
 
-## 🔒 Disclaimer
-Python code execution is sandboxed but not secure for untrusted users. Use only locally.
+**Windows: "python not found"**
+- Use `python3` or ensure Python is in your PATH
+
+**"Unable to fetch answer"**
+- Make sure Ollama is running: `ollama serve`
+- Check backend is on port 8000
+
+**Matplotlib errors on Mac**
+- Already fixed: uses 'Agg' backend
 
 ## 📜 License
 MIT
