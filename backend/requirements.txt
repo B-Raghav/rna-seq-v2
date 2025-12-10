@@ -1,13 +1,18 @@
-fastapi==0.110.0
-uvicorn[standard]==0.29.0
-python-dotenv==1.0.1
-pydantic==2.6.4
-chromadb==0.4.24
-sentence-transformers==2.7.0
-pypdf==4.2.0
-requests==2.31.0
-numpy==1.26.4
-pandas==2.2.2
-matplotlib==3.8.4
-seaborn==0.13.2
-scikit-learn==1.4.2
+# Core
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+python-dotenv>=1.0.1
+pydantic>=2.6.0
+requests>=2.31.0
+
+# RAG
+chromadb>=0.4.24
+sentence-transformers>=2.7.0
+pypdf>=4.2.0
+
+# Data science (use >= to get pre-built wheels)
+numpy>=1.26.0
+pandas>=2.2.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+scikit-learn>=1.4.0
